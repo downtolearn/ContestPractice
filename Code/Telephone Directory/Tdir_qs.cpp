@@ -111,13 +111,17 @@ void quick_sort(vector<string> &data){
 }
 
 void pivot(vector<string>& data, int& left, int& right){
-	//exit condition
-	if(right+left/2 >= data.size()) return;
-
+  //** this is useful for debugging
+  // cout << "\nleft: " << left << "\t\tpivot: " << (right+left)/2 << "\tright: " << right << endl;
+  // print_vector(data);
+  // cout << endl;
+   
+   //exit condition
+    if((right+left)/2 >= data.size() || (right+left)/2 <= 0 || left >= right || right-left < 1) return;
+	
 	//initializations
-	int L = left, R = right;
-	string t1, t2,		
-	pivotElem = data[right+left/2].substr(7, data[right+left/2].length());
+    int L = left, R = right, Piv = (right+left)/2;
+	string t1, t2, pivotElem = data[Piv].substr(7, data[Piv].length());
 	
 	//partitioning
 	while(L <= R){
@@ -132,20 +136,19 @@ void pivot(vector<string>& data, int& left, int& right){
 			t2 = data[R].substr(7, data[R].length());
 		}
 		if(L <= R){
+			//cout << "data left:" << t1 << "\t\t data right:" << t2 << endl;
 			swap(data[L],data[R]);
 			L++;
 			R--;
-			t1 = data[L].substr(7, data[L].length());
-			t2 = data[R].substr(7, data[R].length());
 		}
 	}
 
 	//recursive step
 	if(left < R){
-		pivot(data,left,R);
+	 pivot(data,left,R);
 	}
 	if(L < right){
-		pivot(data,L,right);
+	 pivot(data,L,right);
 	}
 	
 }
@@ -165,6 +168,8 @@ bool compare_strings(string& p1, string& p2){
 	special_to_spaces(p2);
 	string_to_lower(p1);
 	string_to_lower(p2);
+
+	//cout << "p1:" << p1 << "\t\tp2:" <<p2<<endl;
 
 	int spaces1=0, spaces2=0;
 	//comparison logic
@@ -186,15 +191,17 @@ bool compare_strings(string& p1, string& p2){
     		if(p1[pos1] > p2[pos2] && spaces2<=1){
     			return true;
     		}
-    		else if(p1[pos1] < p2[pos2] && spaces1<=1){
+	       	else if(p1[pos1] < p2[pos2] && spaces1<=1){
     			return false;
     		}
+			else if(p1[pos1] > p2[pos2] && spaces2 == spaces1){
+		 		return true;
+			}
 			else {
 				pos1++ ; pos2++;
 			}
 		}
     }
- 
     return false;
 }
 
@@ -242,7 +249,7 @@ void number_to_word(string& num){
 			}
 		}
 	}
-	if(counter>1){		
+	if(counter>=1){		
 		nine_digit_num(toWord);
 		if(index!=0){
 			temp = " ";
@@ -262,6 +269,7 @@ void nine_digit_num(string& num){
 	string million = "million ";
 
 	string word;
+	int length = num.length();
 
 	while(num.length()<9){
 		num.insert(0, "0");
@@ -284,6 +292,15 @@ void nine_digit_num(string& num){
 	}
 	three_digit_num(hundreds);
 	word.append(hundreds); //checks the hundreds place
+	
+	//this is what happends with multiple zeros
+	if(millions == "zero " && thousands == "zero " && hundreds == "zero "){
+		word.clear();
+		while(length > 0){
+			word.insert(0,hundreds);
+			length--;
+		}
+	}
 
 	num.resize(word.size());
 	num = word;
