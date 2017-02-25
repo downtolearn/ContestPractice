@@ -34,9 +34,8 @@ int main(){
 	vector<string> handTypes;
 	vector<int> scores;
 	int score=0;
-	cout <<"get D\n";
+
 	get_data(hands, handTypes);
-	cout << "here 1\n";
 	//sort the cards in each hand
 	for(int i = 0; i < hands.size(); i++){
 		sortCards(hands[i]);
@@ -76,19 +75,25 @@ int get_hand_15(vector<Card>& cards){
 	int tmp=0, start=0, score=0, total=15;
 	cout << "1\n";
 	while(start < cards.size()){
+	cout << "2\n";
 		total -= cards[start].value;
 		if(total < 0){
 			for(int i=0; i<start; i++){
+			cout << "3\n";
 				if(total + cards[i].value==0){
+					cout << "3a\n";
 					total += cards[start].value;
 					start++;
 					score+=2;
 					break;
-				}
+				}	
 			}
+			start++;
 		}
+		else{start++;}
+	cout << "4\n";
 	}
-	cout << "2\n";
+	cout << "22\n";
 	return score;
 }
 
@@ -151,14 +156,14 @@ char value_to_char(int value){
 
 void get_data(vector< vector<Card> >& hands, vector<string>& handTypes){
 	string temp;
+	string handTemp;
 	while(getline(cin, temp)){
 		vector<Card> cards;
-
-		istringstream iss(temp);
-
-		string handTemp;
+		
+		istringstream iss (temp);
 		iss >> handTemp;
 		handTypes.push_back(handTemp);
+
 
 		for(int i = 0; i < 4; i++){
 			iss >> handTemp;
@@ -173,25 +178,8 @@ void get_data(vector< vector<Card> >& hands, vector<string>& handTypes){
 	}
 	
 }
-/*
-void get_data2(vector< vector<Card> >& hands, vector<string>& handTypes){
-	string temp;
-	while(getline(cin, temp)){
-		vector<Card> cards;
-		handTypes.push_back(temp[0]);
-		for(int i = 1; i<=5; i++){
-			Card newCard(char_to_value(temp[i]
 
 
-		}
-
-
-
-
-
-	}
-}
-*/
 void print_data(vector< vector<Card> >& hands, vector<string>& handTypes, vector<int>& scores){
 	for(int i = 0; i < hands.size(); i++){
 		if(handTypes[i] == "h"){
